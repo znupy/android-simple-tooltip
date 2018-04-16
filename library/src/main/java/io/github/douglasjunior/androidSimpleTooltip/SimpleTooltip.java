@@ -213,6 +213,18 @@ public class SimpleTooltip implements PopupWindow.OnDismissListener {
         });
     }
 
+    public void setOnDismissListener(OnDismissListener onDismissListener) {
+        mOnDismissListener = onDismissListener;
+    }
+
+    public void setOnShowListener(OnShowListener onShowListener) {
+        mOnShowListener = onShowListener;
+    }
+
+    public void setOnTapListener(OnTapListener onTapListener) {
+        mOnTapListener = onTapListener;
+    }
+
     private void verifyDismissed() {
         if (dismissed) {
             throw new IllegalArgumentException("Tooltip has ben dismissed.");
