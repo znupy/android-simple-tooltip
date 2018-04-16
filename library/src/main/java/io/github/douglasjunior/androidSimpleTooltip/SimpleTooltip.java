@@ -86,6 +86,7 @@ public class SimpleTooltip implements PopupWindow.OnDismissListener {
     private final Context mContext;
     private OnDismissListener mOnDismissListener;
     private OnShowListener mOnShowListener;
+    private OnTapListener mOnTapListener;
     private PopupWindow mPopupWindow;
     private final int mGravity;
     private final int mArrowDirection;
@@ -149,6 +150,7 @@ public class SimpleTooltip implements PopupWindow.OnDismissListener {
         mAnimationDuration = builder.animationDuration;
         mOnDismissListener = builder.onDismissListener;
         mOnShowListener = builder.onShowListener;
+        mOnTapListener = builder.onTapListener;
         mFocusable = builder.focusable;
         mRootView = SimpleTooltipUtils.findFrameLayout(mAnchorView);
         mHighlightShape = builder.highlightShape;
@@ -314,6 +316,15 @@ public class SimpleTooltip implements PopupWindow.OnDismissListener {
         mContentLayout = linearLayout;
         mContentLayout.setVisibility(View.INVISIBLE);
         mPopupWindow.setContentView(mContentLayout);
+
+        if(mOnTapListener != null) {
+            mContentView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mOnTapListener.onTap(SimpleTooltip.this);
+                }
+            });
+        }
     }
 
     public void dismiss() {
@@ -529,6 +540,10 @@ public class SimpleTooltip implements PopupWindow.OnDismissListener {
         void onShow(SimpleTooltip tooltip);
     }
 
+    public interface OnTapListener {
+        void onTap(SimpleTooltip tooltip);
+    }
+
     /**
      * <div class="pt">Classe responsável por facilitar a criação do objeto <tt>SimpleTooltip</tt>.</div>
      * <div class="en">Class responsible for making it easier to build the object <tt>SimpleTooltip</tt>.</div>
@@ -561,6 +576,7 @@ public class SimpleTooltip implements PopupWindow.OnDismissListener {
         private float animationPadding = -1;
         private OnDismissListener onDismissListener;
         private OnShowListener onShowListener;
+        private OnTapListener onTapListener;
         private long animationDuration;
         private int backgroundColor;
         private int textColor;
@@ -1016,6 +1032,11 @@ public class SimpleTooltip implements PopupWindow.OnDismissListener {
 
         public Builder onShowListener(OnShowListener onShowListener) {
             this.onShowListener = onShowListener;
+            return this;
+        }
+
+        public Builder onTapListener(OnTapListener onTapListener) {
+            this.onTapListener = onTapListener;
             return this;
         }
 
