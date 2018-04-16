@@ -184,9 +184,13 @@ public class SimpleTooltip implements PopupWindow.OnDismissListener {
                     return true;
                 } else if (!mDismissOnOutsideTouch && event.getAction() == MotionEvent.ACTION_OUTSIDE) {
                     return true;
-                } else if ((event.getAction() == MotionEvent.ACTION_DOWN) && mDismissOnInsideTouch) {
-                    dismiss();
-                    return true;
+                } else if ((event.getAction() == MotionEvent.ACTION_DOWN)) {
+                    if(mOnTapListener != null)
+                        mOnTapListener.onTap(SimpleTooltip.this);
+                    if(mDismissOnInsideTouch) {
+                        dismiss();
+                        return true;
+                    }
                 }
                 return false;
             }
@@ -328,15 +332,6 @@ public class SimpleTooltip implements PopupWindow.OnDismissListener {
         mContentLayout = linearLayout;
         mContentLayout.setVisibility(View.INVISIBLE);
         mPopupWindow.setContentView(mContentLayout);
-
-        if(mOnTapListener != null) {
-            mContentView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mOnTapListener.onTap(SimpleTooltip.this);
-                }
-            });
-        }
     }
 
     public void dismiss() {
